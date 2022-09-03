@@ -270,6 +270,7 @@ while (1):
         print("%-8s\n" % strftime("%H:%M:%S"), end="")
 
     dist.print_log2_hist(label, section, section_print_fn=int)
+    dist.print_linear_hist(label, section, section_print_fn=int)
     dist.clear()
 
     countdown -= 1
