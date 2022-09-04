@@ -7,5 +7,5 @@ if [[ $UID != 0 ]]; then
 fi
 
 ./start_trace.sh 
-./lttng_stop.sh 20 && stress --cpu  8 --timeout 20
+./lttng_stop.sh 20 & stress --cpu  8 --timeout 20
 
