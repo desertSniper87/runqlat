@@ -25,9 +25,23 @@
 # 07-Feb-2016   Brendan Gregg   Created this.
 
 from __future__ import print_function
+
+from statistics import quantiles
+
 from bcc import BPF
 from time import sleep, strftime
 import argparse
+import math
+
+
+def get_p95(ddist):
+    values = [value.value for value in ddist.itervalues()]
+    x = quantiles(values, n=100)[95]
+    for ix, i in enumerate(values):
+        if values[ix - 1] > x > values[ix + 1]:
+            return ix + 1
+
+
 
 # arguments
 examples = """examples:
@@ -265,14 +279,18 @@ while (1):
     except KeyboardInterrupt:
         exiting = 1
 
-    print()
+    print(get_p95(dist))
     if args.timestamp:
         print("%-8s\n" % strftime("%H:%M:%S"), end="")
 
-    dist.print_log2_hist(label, section, section_print_fn=int)
-    dist.print_linear_hist(label, section, section_print_fn=int)
+    # return get
+
+    # dist.print_log2_hist(label, section, section_print_fn=int)
+    # dist.print_linear_hist(label, section, section_print_fn=int)
+
     dist.clear()
 
     countdown -= 1
     if exiting or countdown == 0:
+        print(get_p95(dist))
         exit()
